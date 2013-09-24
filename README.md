@@ -2,11 +2,19 @@
 Including common recursion problems (implementation in Ruby):
 
 1. range
+ 
 ```ruby
 range(5, 10) 
 #=> [6, 7, 8, 9]
 ```
+
 2. sum
+
+```ruby
+[1, 2, 3].sum
+#=> 6
+```
+
 
 3. exponent
 
