@@ -131,3 +131,32 @@ describe "#fibs" do
     fibs(6)
   end
 end
+
+describe "#make_change" do
+  # with default coins=[25, 10, 5, 1]
+  it "returns the coins to be changed for a given amount" do
+    make_change(14).should == [10, 1, 1, 1, 1]
+    make_change(25).should == [25]
+  end
+  
+  it "returns an empty array if the amount is 0" do
+    make_change(0).should == []
+  end
+end
+
+describe "#subsets" do
+  it "for an empty array returns only an array of a empty array" do
+    subsets([]).sort.should == [[]]
+  end
+  
+  it "for an array of one element returns an array of an empty array and an array of that single element" do
+    subsets([1]).sort.should == [[], [1]].sort
+  end
+  
+  it "returns all possible subsets" do
+    subsets([1, 2]).sort.should == [[], [1], [2], [1, 2]].sort
+    subsets([1, 2, 3]).sort.should == [[], [1], [2], [1, 2], [3], [1, 3], [2, 3], [1, 2, 3]].sort
+  end
+end
+
+
