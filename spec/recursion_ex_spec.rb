@@ -142,6 +142,40 @@ describe "#make_change" do
   it "returns an empty array if the amount is 0" do
     make_change(0).should == []
   end
+  
+  it "calls itself recursively" do
+    should_receive(:make_change).at_least(:twice).and_call_original
+    make_change(6)
+  end
+end
+
+describe "#bsearch" do 
+  it "finds the target and return the index of the target in the array" do
+    bsearch([0, 1, 2, 3, 4, 5], 3).should == 3
+    bsearch([0, 1, 2, 3, 4, 5], 0).should == 0
+    bsearch([0, 1, 2, 3, 4, 5], 5).should == 5
+  end
+
+  it "returns nil if the target is not found" do
+    bsearch([0, 1, 2, 3, 4, 5], 6).should == nil
+  end
+
+  it "calls itself recursively" do
+    should_receive(:bsearch).at_least(:twice).and_call_original
+    bsearch([1, 2, 3], 2)
+    bsearch([0, 1, 2, 3, 4, 5], 5)
+  end
+end
+
+describe "#merge_sort" do
+  it "returns a sorted array" do 
+    merge_sort([2, 3, 1, 5, 2, 8, 9]).should == [1, 2, 2, 3, 5, 8, 9]
+  end
+  
+  it "calls itself recursively" do
+    should_receive(:merge_sort).at_least(:twice).and_call_original
+    merge_sort([2, 1, 3])
+  end
 end
 
 describe "#subsets" do
@@ -156,6 +190,11 @@ describe "#subsets" do
   it "returns all possible subsets" do
     subsets([1, 2]).sort.should == [[], [1], [2], [1, 2]].sort
     subsets([1, 2, 3]).sort.should == [[], [1], [2], [1, 2], [3], [1, 3], [2, 3], [1, 2, 3]].sort
+  end
+  
+  it "calls itself recursively" do
+    should_receive(:subsets).at_least(:twice).and_call_original
+    subsets([1, 2, 3])
   end
 end
 
