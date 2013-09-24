@@ -7,6 +7,6 @@ Including common recursion problems (implementation in Ruby):
 4. Deep dup that handles arrays inside an array
 5. Fibonacci Sequence
 6. Make Change
-7. Subsets
-8. Binary Search
-9. Merge Sort
+7. Binary Search
+8. Merge Sort
+9. Subsets
