@@ -3,8 +3,9 @@ Including common recursion problems (implementation in Ruby):
 
 1. range
 
-'''ruby
-'''
+```ruby
+
+```
 
 2. sum
 
