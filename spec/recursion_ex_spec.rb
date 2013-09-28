@@ -4,19 +4,19 @@ require 'recursion_ex'
 
 describe "#range" do
   it "returns an empty array when start equals end" do
-    range(1, 1) == []
+    range(1, 1) == [1]
   end
 
   it "returns an empty array when the difference between start and end is 1" do
-    range(1, 2) == []
+    range(1, 2) == [1, 2]
   end
   
   it "solves a simple case by returning an array of one element" do
-    range(1, 3) == [2]
+    range(1, 3) == [1, 2, 3]
   end
   
   it "solves longer range of numbers too" do
-    range(5, 10) == [6, 7, 8, 9]
+    range(5, 10) == [5, 6, 7, 8, 9, 10]
   end
   
   it "calls itself recursively" do
@@ -29,21 +29,21 @@ end
 describe "#sum" do
   # write a `Array#sum` method (an instance method on array)
   it "returns 0 if the array is empty" do
-    [].sum.should == 0
+    sum([]).should == 0
   end
 
   it "returns the value of the element if only one element present" do
-    [1].sum.should == 1
+    sum([1]).should == 1
   end
   
   it "otherwise return the sum of all elements in the array" do
-    [1, 2, 3].sum.should == 6
+    sum([1, 2, 3]).should == 6
   end
   
   it "calls itself recursively" do
     test_arr = [4, 5, 6, 7]
-    test_arr.should_receive(:sum).at_least(:twice).and_call_original
-    test_arr.sum
+    should_receive(:sum).at_least(:twice).and_call_original
+    sum(test_arr)
   end
 end
 

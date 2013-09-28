@@ -1,54 +1,42 @@
-def range(start, ending)
-  if start == ending || start + 1 == ending
-    []
+def range(min, max)
+  return [min] if min == max
+  
+  range(min, max - 1) << max
+end
+
+
+def sum(nums)
+  return 0 if nums.empty?
+
+  return nums.pop + sum(nums)
+end
+
+
+def exp(base, power)
+  case power
+  when 0
+    1
+  when 1    
+    base
   else
-    [start + 1] + range(start + 1, ending)
+    prev_exp = exp(base, power/2)
+    (power % 2 == 0) ? (prev_exp ** 2) : (prev_exp ** 2) * base
   end
 end
 
 class Array
-  def sum
-    if self.length == 0
-      0
-    elsif self.length == 1
-      self.first
-    else
-      self.pop + self.sum
-    end
-  end
-end
-
-def exp(base, n)
-  if n == 0
-    1
-  elsif n == 1
-    base
-  else
-    prev_exp = exp(base, n/2)
-    if n % 2 == 0
-      (prev_exp ** 2) 
-    else
-      (prev_exp ** 2) * base
-    end
-  end
-end
-
-class Object
   def deep_dup
-    if !self.is_a?(Array)
-      self
-    else
-      self.map(&:deep_dup)
-    end
+    self.map { |el| (el.is_a?(Array)) ? el.deep_dup : el }
   end
 end
 
 
 
 def fibs(count)
-  if count == 1
+  case count
+  when 1
     [0]
-  elsif count == 2
+  when 2
     [0, 1]
   else
     prev_fibs = fibs(count - 1)
@@ -57,69 +45,74 @@ def fibs(count)
 end
 
 
-# TODO 1) refactor this code 2) make it work for arbitrary coin combinations like [10, 7, 1]
-def make_change(amount, coins = [25, 10, 5, 1])
-  return [] if amount == 0
-  largest_coin = []
-  coins.each do |coin|
-    if coin <= amount
-      largest_coin = coin
-      break
-    end
-  end
-  [largest_coin] + make_change(amount - largest_coin)
-end
 
 def bsearch(arr, target)
-  return nil if arr.length == 1 && arr.first != target
+  return nil if arr.empty?
+  
   mid = arr.length/2
   if arr[mid] == target
     mid
   elsif arr[mid] <= target
-    sub_search_result = bsearch(arr[mid..-1], target)
-    (sub_search_result.nil?) ? nil : mid + sub_search_result
+    sub_answer = bsearch(arr[mid + 1..-1], target)
+    (sub_answer.nil?) ? nil : (mid + 1) + sub_answer
   else
-    sub_search_result = bsearch(arr[0..mid - 1], target)
-    (sub_search_result.nil?) ? nil : sub_search_result
+    bsearch(arr[0..mid - 1], target)
   end
 end
 
 
-# TODO think about edge cases with mid point
+def make_change(amount, coins = [25, 10, 5, 1])
+  return [] if target == 0
+
+  coins = coins.sort.reverse
+
+  best_change = nil
+  coins.each_with_index do |coin, index|
+    next if coin > target
+
+    remainder = target - coin
+
+    best_remainder = make_change(remainder, coins[index..-1])
+
+    this_change = [coin] + best_remainder
+
+    if (best_change.nil? || (this_change.count < best_change.count))
+      best_change = this_change
+    end
+  end
+
+  best_change
+end
+
+
 def merge_sort(arr)
-  if arr.length == 1
-    arr
-  else
-    mid = arr.length / 2
-    sorted_left = merge_sort(arr[0..mid - 1])
-    sorted_right = merge_sort(arr[mid..-1])
-    merge(sorted_left, sorted_right)
-  end
+  return arr if arr.length < 2
+
+  mid = arr.length / 2
+  sorted_left = merge_sort(arr.take(mid))
+  sorted_right = merge_sort(arr.drop(mid))
+  merge(sorted_left, sorted_right)
 end
+
 
 def merge(left, right)
-  return right if left.empty?
-  return left if right.empty?
-  
-  if left[0] < right[0]
-    first_el = left.shift
-    [first_el] + merge(left, right)
-  else
-    first_el = right.shift
-    [first_el] + merge(left, right)
+  merged_arr = []
+  until left.empty? || right.empty?
+    merged_arr << ((left.first < right.first) ? left.shift : right.shift)
   end
+  
+  merged_arr + left + right
 end
 
 
-# TODO improve and fix the uniqueness problem
 def subsets(arr)
-    current_level = [arr]
-    arr.each do |el|
-      reduced_arr = arr - [el]
-      current_level += [[el], reduced_arr]
-      current_level += subsets(reduced_arr)
-    end
-    current_level.uniq
+  return [[]] if arr.empty?
+  
+  val = arr.first
+  subs = subsets(arr.drop(1))
+  subs += subs.map { |sub| [val] + sub }
+
+  subs
 end
 
 
